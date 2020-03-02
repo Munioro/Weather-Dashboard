@@ -1,0 +1,19 @@
+body {
+    font-family: 'Merriweather', ;
+}
+
+nav {
+    background-image: url("https://www.itl.cat/pngfile/big/14-142547_cloud-clouds-background-for-death.jpg");
+}
+
+.search-city{
+    background-color: aliceblue;
+    margin-left: -20px;
+}
+.searchBtn{
+    margin: 10px;
+}
+
+.today-forcast{
+    border: solid 1px;
+}
