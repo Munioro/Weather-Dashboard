@@ -45,25 +45,38 @@ doc.ready(function(){
     var forcastDiv = $(".forcast");
     var todayForcast = $(".today-forcast");
     var weatherData = ['Temperature', 'Humidity', 'WindSpeed', 'Description'];
+    //var fiveDays = [moment().add(1, 'days').formats(['L']), moment().add(2, 'days').formats(['L']), moment().add(3, 'days').formats(['L']), moment().add(4, 'days').formats(['L']), moment().add(5, 'days').formats(['L'])];
+
     for (var i = 0; i < weatherData.length; i++){
         var weatherP = $('<p>').attr("ID", weatherData[i]).text(weatherData[i] + ": ");
      dataDiv.append(weatherP);
      }
     todayForcast.append(dataDiv);
 
+    // for (var j = 0; j < fiveDays.length; j++){
+    //     var fiveDiv = $('<div>');
+
+    //     forcastDiv.append(fiveDiv);
+
+
+    // }
+
 
     $.ajax({
         url: queryURL,
         methos: 'GET'
     }).then(function(response){
-
-        $('#currentDate').text(response.city.name +" (" + moment().format('L') + ")");
+        console.log(response)
         var responlist = response.list[0];
+        var iconCode = responlist.weather[0].icon
+        var iconurl = "http://openweathermap.org/img/wn/" + iconCode + ".png";
+
+        $('#currentDate').html(response.city.name +" (" + moment().format('L') + ") " + "<img class='icon'>");
+        $('.icon').attr('src', iconurl);
         $("#Temperature").append(kelvinToFahrenheit(responlist.main.temp));
         $("#Humidity").append(responlist.main.humidity);
         $("#WindSpeed").text("wind Speed: " + responlist.wind.speed);
         $("#Description").text(responlist.weather[0].description.toUpperCase());
-        console.log(response)
     })
     })
     function kelvinToFahrenheit(K){
@@ -74,4 +87,5 @@ doc.ready(function(){
     function clearDiv(div){
         div.remove()
     }
+
 })
