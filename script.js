@@ -1,10 +1,10 @@
 var doc = $(document.body);
 
 doc.ready(function(){
+    //create form to search a city
     var citiesContainer =  $('.search-city');
     var cityForm = $("<form>");
     var inputID = ['City', 'State', 'Country'];
-    var recentCities = [];
     var searchBtn = $('<button class="searchBtn" type="submit" value="Search City">').text("search");
 
     for(var i= 0; i < inputID.length; i++){
@@ -19,20 +19,18 @@ doc.ready(function(){
     }
     cityForm.append(searchBtn);
     citiesContainer.append(cityForm);
-
-    var placehlderCity = ["San Antonio","San Jose","Guadalajara","Merced","Orlando","Los Angeles","New York","Toronto","Athens","Amman",]
-    for (var i= 0; i < placehlderCity.length; i++){
+    //create buttons for a quick search
+    var quickCities = ["San Antonio","San Jose","Guadalajara","Merced","Orlando","Los Angeles","New York","Toronto","Athens","Amman",]
+    for (var i= 0; i < quickCities.length; i++){
         var divBtn = $('<div>');
-        var recentBtn = $('<button class= "btn-group-verticle recent-ycit">').text(placehlderCity[i]);
+        var quickBtn = $('<button class= "btn-group-verticle recent-ycit">').text(quickCities[i]);
         //add text to btns
-        //recentBtn.text(recentCities);
         //append to citiesContainer
-        divBtn.append(recentBtn);
+        divBtn.append(quickBtn);
         citiesContainer.append(divBtn);
 
     }
-    console.log(moment().add(5, 'days').format('L'));
-    //AJAX use API to grab object
+    //create on click functions
     searchBtn.click(function (event){
         event.preventDefault();
     var countryCode =$('#Country').val();
@@ -44,6 +42,7 @@ doc.ready(function(){
         var cityName = $(this).text();
         getWeather(cityName);
     })
+    //function definitions
     function getWeather(cityName, state, countryCode){
         clearDiv($('.data'));
         clearDiv($('.card'))
@@ -61,24 +60,24 @@ doc.ready(function(){
         todayForcast.append(dataDiv);
 
 
-
+         //ajax api call
         $.ajax({
             url: queryURL,
             methos: 'GET'
         }).then(function(response){
-            console.log(response)
+            //grab necessary data from response object
             var responlist = response.list[1];
             var iconCode = responlist.weather[0].icon
             var iconurl = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
             var fiveDays = [moment().add(1, 'days').format('L'), moment().add(2, 'days').format('L'), moment().add(3, 'days').format('L'), moment().add(4, 'days').format('L'), moment().add(5, 'days').format('L')];
-
+            //append data to DOM
             $('#currentDate').html(response.city.name +" (" + moment().format('L') + ") " + "<img class='icon'>");
             $('.icon').attr('src', iconurl);
             $("#Temperature").append(kelvinToFahrenheit(responlist.main.temp));
             $("#Humidity").append(responlist.main.humidity);
             $("#WindSpeed").text("wind Speed: " + responlist.wind.speed);
             $("#Description").text(responlist.weather[0].description.toUpperCase());
-
+            //create 5 day forcast
             for (var j = 1; j <= fiveDays.length; j++){
                 var fiveDiv = $('<div class="card text-white bg-primary mb-3 col-sm">')
                 var cardBody = $('<div class="card-body">');
@@ -103,11 +102,13 @@ doc.ready(function(){
 
         })
     }
+    //convert kelvin to farenheit
     function kelvinToFahrenheit(K){
         var temp = Math.floor((K - 273.15) * 9/5 + 32);
        temp += String.fromCharCode(176) + 'F';
        return temp;
     }
+    //clear divs
     function clearDiv(div){
         div.remove()
     }
