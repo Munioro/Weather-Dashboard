@@ -3,13 +3,13 @@ var doc = $(document.body);
 doc.ready(function(){
     //create form to search a city
     var citiesContainer =  $('.search-city');
-    var cityForm = $("<form>");
+    var cityForm = $('<form class="form-group">');
     var inputID = ['City', 'State', 'Country'];
     var searchBtn = $('<button class="searchBtn" type="submit" value="Search City">').text("search");
 
     for(var i= 0; i < inputID.length; i++){
         var searchLabel = $('<label>').attr('for', inputID[i]);
-        var citySearch = $('<input type="text" class="form-row">').attr('ID', inputID[i]);
+        var citySearch = $('<input type="text" class="form-control">').attr('ID', inputID[i]);
 
 
 
